@@ -28,7 +28,7 @@ if not veracodeServer:
 veracodeCredentials = "%s:%s" % (veracodeServer['username'],veracodeServer['password'])
 
 # The Veracode api works only under curl, so we break out to a shell subprocess here rather than using HttpRequest/HttpResponse.
-appBuilds = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, 'https://analysiscenter.veracode.com/api/4.0/getappbuilds.do'])
+appBuilds = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '%s/api/4.0/getappbuilds.do' % veracodeServer['url']])
 appBuildsXmlRoot = ET.fromstring(cleanXml(appBuilds))
 
 build_id = None
@@ -37,7 +37,7 @@ for build in appBuildsXmlRoot.iter('build'):
 
 data = {}
 if build_id:
-    detailedReport = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, 'https://analysiscenter.veracode.com/api/4.0/detailedreport.do?build_id=%s' % build_id])
+    detailedReport = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '%s/api/4.0/detailedreport.do?build_id=%s' % (veracodeServer['url'], build_id)])
     detailedReportXmlRoot = ET.fromstring(cleanXml(detailedReport))
     for staticAnalysis in detailedReportXmlRoot.iter('static-analysis'):
         data = []

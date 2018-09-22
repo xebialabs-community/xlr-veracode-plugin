@@ -32,7 +32,7 @@ if not veracodeServer:
 veracodeCredentials = "%s:%s" % (veracodeServer['username'],veracodeServer['password'])
 
 # The Veracode api works only under curl, so we break out to a shell subprocess here rather than using HttpRequest/HttpResponse.
-appBuilds = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, 'https://analysiscenter.veracode.com/api/4.0/getappbuilds.do'])
+appBuilds = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '%s/api/4.0/getappbuilds.do' % veracodeServer['url']])
 appBuildsXmlRoot = ET.fromstring(cleanXml(appBuilds))
 
 build_id = None
@@ -44,7 +44,7 @@ data = {}
 if build_id:
     tempdir = tempfile.mkdtemp()
     pdfFilename = "veracode-detailed-report-%s.pdf" % build_id
-    subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '-o', '%s/%s' % (tempdir, pdfFilename), 'https://analysiscenter.veracode.com/api/4.0/detailedreportpdf.do?build_id=%s' % build_id])
+    subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '-o', '%s/%s' % (tempdir, pdfFilename), '%s/api/4.0/detailedreportpdf.do?build_id=%s' % (veracodeServer['url'], build_id)])
     print "Adding attachment to current task\n"
     taskApi.addAttachment(getCurrentTask().id, pdfFilename, get_bytes_from_file("%s/%s" % (tempdir, pdfFilename)))
     # TO-DO:
