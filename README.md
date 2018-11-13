@@ -1,4 +1,4 @@
-# TMNA XL Release Veracode plugin v1.0.0
+# XL Release Veracode plugin
 
 ## Preface
 
@@ -30,7 +30,7 @@ Displays data in a dashboard tile.
 
 ### Configuration:
 
-* In Shared Configuration at the folder or global level, create a Tmna:Veracode Server with url, username, and password:
+* In Shared Configuration at the folder or global level, create a Veracode Server with url, username, and password:
  
 ![](images/server-config.png)
  
@@ -51,7 +51,7 @@ Displays data in a dashboard tile.
 ![](images/tile-2.png)
 
  
-* Add a Tmna:GetVeracodeDetailedReportPdf task to the template's Release Flow page:
+* Add a GetVeracodeDetailedReportPdf task to the template's Release Flow page:
  
 ![](images/task-1.png)
  

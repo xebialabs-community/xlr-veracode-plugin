@@ -15,14 +15,15 @@
            xmlns="http://www.xebialabs.com/deployit/synthetic"
            xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
-  <type type="tmna.VeracodeServer" extends="configuration.HttpConnection" />
+  <type type="veracode.Server" extends="configuration.HttpConnection" />
 
-  <type type="tmna.GetVeracodeDetailedReportPdf" extends="xlrelease.PythonScript" >
-    <property name="veracodeServer" kind="ci" referenced-type="tmna.VeracodeServer" category="input" />
+  <type type="veracode.GetVeracodeDetailedReportPdf" extends="xlrelease.PythonScript" >
+    <property name="iconLocation" default="veracode/veracode.jpg" hidden="true" />
+    <property name="veracodeServer" kind="ci" referenced-type="veracode.Server" category="input" />
   </type>
 
-  <type type="tmna.VeracodeResultsTile" label="Veracode results" extends="xlrelease.Tile" description="Display Veracode results">
-    <property name="veracodeServer" kind="ci" referenced-type="tmna.VeracodeServer" category="input" />
+  <type type="veracode.VeracodeResultsTile" label="Veracode results" extends="xlrelease.Tile" description="Display Veracode results">
+    <property name="veracodeServer" kind="ci" referenced-type="veracode.Server" category="input" />
     <property name="title" description="Tile title" default="Veracode results" />
     <!-- Path to the HTML template of the summary view of the tile -->
     <property name="uri" hidden="true" default="include/VeracodeResultsTile/veracode-results-tile-summary-view.html" />

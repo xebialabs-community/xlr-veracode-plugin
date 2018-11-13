@@ -90,8 +90,8 @@
   }
 
   VeracodeResultsService.$inject = ['Backend'];
-  VeracodeResultsTileViewController.$inject = ['$scope', 'xlrelease.tmna.VeracodeResultsService', 'XlrTileHelper'];
+  VeracodeResultsTileViewController.$inject = ['$scope', 'xlrelease.veracode.VeracodeResultsService', 'XlrTileHelper'];
   angular.module('xlrelease.veracode.tile', []);
-  angular.module('xlrelease.veracode.tile').service('xlrelease.tmna.VeracodeResultsService', VeracodeResultsService);
-  angular.module('xlrelease.veracode.tile').controller('tmna.VeracodeResultsTileViewController', VeracodeResultsTileViewController);
+  angular.module('xlrelease.veracode.tile').service('xlrelease.veracode.VeracodeResultsService', VeracodeResultsService);
+  angular.module('xlrelease.veracode.tile').controller('veracode.VeracodeResultsTileViewController', VeracodeResultsTileViewController);
 })();
