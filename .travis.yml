@@ -1,1 +1,12 @@
 language: java
+deploy:
+  provider: releases
+  api_key:
+    secure: HMT+J122wlWmEAtOfsaQV7P0lnsqNpYMQzWk+be1mP6i3h254QTNmAH2mNnTYwl4r0Y9n8onnwrcTX8JM9Wu5HCd7/4rs+eVrxSsbAI+uRCvwCqxqgyphGrEEgqNNkCRT+yd4JjEqDHXHoGkjZAb5oUA83e6ibigGj8ajI7jA/jXX+xoM+4snwMNo7Hjlk6y5JT8lJFBVJBUU1rqdejPj924cxie0Flk5qW6UVwNqqHKmlHsAEdlPbUx+VlPcnixKciYvdkHS75oD2k9PlI+Fd8w4XH+qreIsws839433Qw+LonrRewGJpD4bPGwHfBlWYEi9aNibPb0DNBRtenDUpEeRLy6rbLmCQ1zlF4EZ7RWP4YTU2C56L84EX3UfcKKDAePQHuw+CI36i/RHnSvEgZrCSN4FvLybmpPa7QQlhqSsRJCzv+JWSjmi8Mo7VnICwhazLcW/SwhUyOfEiDclzFd+adxMRPhrvELXRLwInLq/CCkGu7ZXKjr0BH1TYA1amw3QVxUSjX9PbYs3caE6uoWQFRtGeDsJi3EKrnxMxemTUHIt3legtnRF2i2p7hdw/FiaGa4AeJLRiNQ4q7lQvN16n99AoD9d1Fb0e5Wze6BnibWq206dl13teg8sVAt1aDLpiWGYm3PotYzM8Sv4UaaZsW4fAZhDEEZuhiD644=
+  file_glob: true
+  file: build/libs/*
+  skip_cleanup: true
+  on:
+    all_branches: true
+    tags: true
+    repo: xebialabs-external/xlr-veracode-plugin
