@@ -15,11 +15,16 @@
            xmlns="http://www.xebialabs.com/deployit/synthetic"
            xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
-  <type type="veracode.Server" extends="configuration.HttpConnection" />
+  <type type="veracode.Server" extends="configuration.HttpConnection">
+    <property name="scriptLocation" hidden="true" default="configuration/HttpConnectionCheck.py"/>
+    <property name="checkConfigurationPath" hidden="true" default="/api/4.0/getapplist.do"/>
+    <property name="checkConfigurationContentType" hidden="true" default="application/xml"/>
+  </type>
 
   <type type="veracode.GetVeracodeDetailedReportPdf" extends="xlrelease.PythonScript" >
     <property name="iconLocation" default="veracode/veracode.jpg" hidden="true" />
     <property name="veracodeServer" kind="ci" referenced-type="veracode.Server" category="input" />
+    <property name="build_id" kind="integer" description="Veracode Build ID" category="input" />
   </type>
 
   <type type="veracode.VeracodeResultsTile" label="Veracode results" extends="xlrelease.Tile" description="Display Veracode results">
