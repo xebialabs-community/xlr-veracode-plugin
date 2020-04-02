@@ -24,7 +24,7 @@
   <type type="veracode.GetVeracodeDetailedReportPdf" extends="xlrelease.PythonScript" >
     <property name="iconLocation" default="veracode/veracode.jpg" hidden="true" />
     <property name="veracodeServer" kind="ci" referenced-type="veracode.Server" category="input" />
-    <property name="build_id" kind="integer" description="Veracode Build ID" category="input" />
+    <property name="build_id" kind="string" description="Veracode Build ID" category="input" />
   </type>
 
   <type type="veracode.VeracodeResultsTile" label="Veracode results" extends="xlrelease.Tile" description="Display Veracode results">
