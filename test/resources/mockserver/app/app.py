@@ -16,11 +16,14 @@ from werkzeug.exceptions import HTTPException, BadRequest, NotFound
 from functools import wraps
 import os, io, json
 
+import verify_hmac
+
 app = Flask(__name__)
 
 # These are the username and password we expect 
-expectedUN = "xlr_test"
-expectedPW = "admin"
+api_key_id = '3ddaeeb10ca690df3fee5e3bd1c329fa'
+api_key_secret = '3ddaeeb10ca690df3fee5e3bd1c329fa3ddaeeb10ca690df3fee5e3bd1c329fa3ddaeeb10ca690df3fee5e3bd1c329fa3ddaeeb10ca690df3fee5e3bd1c329fa'
+signing_data = "id=3ddaeeb10ca690df3fee5e3bd1c329fa&host=localhost&url=/api/4.0/detailedreportpdf.do?build_id=1&method=GET"
 
 def getFile( fileName, status="200" ):
      filePath = "../../mockserver/app/responses/%s" % fileName
@@ -36,12 +39,6 @@ def getFile( fileName, status="200" ):
      return resp
 
 
-def check_auth(username, password):
-    """This function is called to check if a username /
-    password combination is valid.
-    """
-    return username == expectedUN and password == expectedPW
-
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
@@ -53,11 +50,13 @@ def authenticate():
 def requires_auth(f):
     """
     Determines if the basic auth is valid
+    Example...
+    Authorization: VERACODE-HMAC-SHA-256 id=3ddaeeb10ca690df3fee5e3bd1c329fa,ts=1588878918722,nonce=a8d7fdb5aa22fc3fdb688fbb6807c2b4,sig=055490fe1aba6c309205ef5322b37a77a9de0646a318de23699e69ce4c5cb9d4
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
+        if not verify_hmac.verifyAuthorization(signing_data, request.headers['Authorization'], api_key_secret):
+            print('ERROR: hmac authorization failed')
             return authenticate()
         return f(*args, **kwargs)
     return decorated

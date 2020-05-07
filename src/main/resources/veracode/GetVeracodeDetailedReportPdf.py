@@ -11,8 +11,18 @@
 import json
 import shutil
 import tempfile
+import logging
 
 from veracode.HttpRequest import HttpRequest
+
+logging.basicConfig(filename='log/custom-plugin.log',
+                            filemode='a',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.DEBUG)
+
+logging.debug("main: begin")
+
 
 if not veracodeServer:
   raise Exception("Veracode server must be provided")
@@ -23,21 +33,18 @@ if not build_id:
 
 pdfFilename = "veracode-detailed-report-%s.pdf" % build_id
 
-params = {
-    'url': veracodeServer['url'],
-    'username': veracodeServer['username'],
-    'password': veracodeServer['password'],
-    'proxyHost': veracodeServer['proxyHost'],
-    'proxyPort': veracodeServer['proxyPort'],
-    'proxyUsername': veracodeServer['proxyUsername'],
-    'proxyPassword': veracodeServer['proxyPassword']
-}
 
-status, result, headers = HttpRequest(params).get_file('/api/4.0/detailedreportpdf.do?build_id=%s' % build_id, contentType='application/pdf')
+host = veracodeServer['url']
+api_key_id = veracodeServer['api_key_id']
+api_key_secret = veracodeServer['api_key_secret']
+
+request = HttpRequest(host, api_key_id, api_key_secret)
+
+status, result = request.get_file('/api/4.0/detailedreportpdf.do?build_id=%s' % build_id, contentType='application/pdf')
 
 if status != 200:
     raise Exception(
-        "Failed to connect to Veracode Server. Status: %s" % status
+        "Veracode Server request failed. Status: %s, %s" % (status, result)
     )
 
 taskApi.addAttachment(getCurrentTask().id, pdfFilename, result)
