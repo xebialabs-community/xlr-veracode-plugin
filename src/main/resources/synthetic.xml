@@ -20,8 +20,8 @@
     <property name="api_key_id" kind="string" description="API Key ID"/>
     <property name="api_key_secret" kind="string" password="true" description="API Key Secret"/>
     <property name="scriptLocation" hidden="true" default="veracode/ConnectionCheck.py"/>
-    <property name="checkConfigurationPath" hidden="true" default="/api/4.0/getapplist.do"/>
-    <property name="checkConfigurationContentType" hidden="true" default="application/xml"/>
+    <!-- <property name="checkConfigurationPath" hidden="true" default="/api/4.0/getapplist.do"/>
+    <property name="checkConfigurationContentType" hidden="true" default="application/xml"/> -->
   </type>
 
   <type type="veracode.GetVeracodeDetailedReportPdf" extends="xlrelease.PythonScript" >

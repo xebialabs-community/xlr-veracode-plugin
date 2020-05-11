@@ -1,8 +1,7 @@
 import sys
-import requests
 import logging
 
-import veracode.HttpRequest as HttpRequest
+from veracode.HttpRequest import HttpRequest
 
 logging.basicConfig(filename='log/custom-plugin.log',
                             filemode='a',
@@ -12,22 +11,19 @@ logging.basicConfig(filename='log/custom-plugin.log',
 
 logging.debug("main: begin")
 
-headers = {"User-Agent": "XL Release"}
+host = configuration.url
+api_key_id = configuration.api_key_id
+api_key_secret = configuration.api_key_secret
 
-logging.debug('globals -------------------')
-logging.debug(globals())
-logging.debug('---------------------------')
-
-host = configuration.getUrl()
-api_key_id = configuration.getItem('api_key_id')
-api_key_secret = configuration.getItem('api_key_secret')
+logging.debug("  connection parameters : host='%s', api_key='%s'" % (host, api_key_id))
 
 request = HttpRequest(host, api_key_id, api_key_secret)
-api_base = "/appsec/v1"
 
-status, content = request.get_json("/appsec/v1/applications")
+status, content = request.get("/api/4.0/getapplist.do")
 
 if status > 200:
     raise Exception(
         "Failed to connect to Veracode Server. Status: %s" % status
     )
+
+logging.debug("main: end")

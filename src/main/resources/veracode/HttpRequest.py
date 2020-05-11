@@ -56,46 +56,24 @@ class HttpRequest:
         return urllib.quote(url, ':/?&=%')
 
 
-    def get_json(self, context, **options):
-        url = self.quote(self.createPath(self.host, context))
-
-        headers = self.headers
-        header['Content-Type'] = options.get('contentType', None)
-        header['Accept'] = options.get('contentType', None)
-
-        try:
-            response = requests.get(url, auth=RequestsAuthPluginVeracodeHMAC(api_key_id=self.api_key_id, api_key_secret=self.api_key_secret), headers=headers)
-        except requests.RequestException as e:
-            print("Whoops!")
-            print(e)
-            sys.exit(1)
-
-        if response.ok:
-            status = response.status_code
-            content = response.json
-
-            return status, content
-
-        else:
-            print(response.status_code)
-    
-    def get_file(self, context, **options):
+    def get(self, context, **options):
         """
-        Return file content as byte array.
+        Return get response
         """
         url = self.quote(self.createPath(self.host, context))
 
         headers = self.headers
         headers['Content-Type'] = options.get('contentType', None)
+        headers['Accept'] = options.get('contentType', None)
 
         try:
-            logging.debug('[get_file] url = "%s"' % url)
+            logging.debug('[get] url = "%s"' % url)
             response = requests.get(url, auth=RequestsAuthPluginVeracodeHMAC(api_key_id=self.api_key_id, api_key_secret=self.api_key_secret), headers=headers)
-            logging.debug('[get_file] response...')
+            logging.debug('[get] response...')
             logging.debug(response)
         except requests.RequestException as e:
-            logging.error('[get_file] url = "%s" request failed' % url)
+            logging.error('[get] url = "%s" request failed' % url)
             logging.error(e)
-            sys.exit(1)
+            raise e
 
         return response.status_code, response.content

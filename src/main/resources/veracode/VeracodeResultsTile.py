@@ -25,11 +25,23 @@ def cleanXml(xmlstring):
 if not veracodeServer:
   raise Exception("Veracode server must be provided")
 
-veracodeCredentials = "%s:%s" % (veracodeServer['username'],veracodeServer['password'])
+
+host = veracodeServer['url']
+api_key_id = veracodeServer['api_key_id']
+api_key_secret = veracodeServer['api_key_secret']
+
+request = HttpRequest(host, api_key_id, api_key_secret)
+
+# Get application builds
+status, result = request.get_file('/api/4.0/getappbuilds.do', contentType='application/xml')
+
+if status != 200:
+    raise Exception(
+        "Veracode Server request failed. Status: %s, %s" % (status, result)
+    )
 
 # The Veracode api works only under curl, so we break out to a shell subprocess here rather than using HttpRequest/HttpResponse.
-appBuilds = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '%s/api/4.0/getappbuilds.do' % veracodeServer['url']])
-appBuildsXmlRoot = ET.fromstring(cleanXml(appBuilds))
+appBuildsXmlRoot = ET.fromstring(cleanXml(result))
 
 build_id = None
 for build in appBuildsXmlRoot.iter('build'):
@@ -37,8 +49,13 @@ for build in appBuildsXmlRoot.iter('build'):
 
 data = {}
 if build_id:
-    detailedReport = subprocess.check_output(['/usr/bin/curl', '-u', veracodeCredentials, '%s/api/4.0/detailedreport.do?build_id=%s' % (veracodeServer['url'], build_id)])
-    detailedReportXmlRoot = ET.fromstring(cleanXml(detailedReport))
+    status, result = request.get_file('/api/4.0/detailedreport.do?build_id=%s' % build_id, contentType='application/xml')
+    if status != 200:
+        raise Exception(
+            "Veracode Server request failed. Status: %s, %s" % (status, result)
+        )
+
+    detailedReportXmlRoot = ET.fromstring(cleanXml(result))
     for staticAnalysis in detailedReportXmlRoot.iter('static-analysis'):
         data = []
         for key in staticAnalysis.attrib:

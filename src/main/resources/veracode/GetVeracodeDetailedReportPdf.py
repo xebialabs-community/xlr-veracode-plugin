@@ -40,7 +40,7 @@ api_key_secret = veracodeServer['api_key_secret']
 
 request = HttpRequest(host, api_key_id, api_key_secret)
 
-status, result = request.get_file('/api/4.0/detailedreportpdf.do?build_id=%s' % build_id, contentType='application/pdf')
+status, result = request.get('/api/4.0/detailedreportpdf.do?build_id=%s' % build_id, contentType='application/pdf')
 
 if status != 200:
     raise Exception(
